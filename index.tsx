@@ -14,29 +14,33 @@ const React = {
   },
 };
 
-const useState = (initialValue) => {
-  console.log("initialValue", initialValue);
-  let state = initialValue;
-  let setState = (newState) => {
-    console.log("newState", newState);
-    state = newState;
+const states = [];
+let stateCursor = 0;
+
+const useState = (initialState) => {
+  const FROZENCURSOR = stateCursor;
+  states[FROZENCURSOR] = states[FROZENCURSOR] || initialState;
+  const setState = (newState) => {
+    states[FROZENCURSOR] = newState;
     rerender();
   };
-  return [
-    () => state, // 함수를 반환하여 state 값을 얻음
-    setState,
-  ];
+  stateCursor++;
+  return [states[FROZENCURSOR], setState];
 };
 
 const App = () => {
   const [name, setName] = useState("ikjun");
+  const [count, setCount] = useState(0);
   return (
     <div className="good">
-      <h1>hello, {`${name()}`}</h1>
-      <input type="text" placeholder="name" value={name()} onchange={(e) => setName(e.target.value)} />
+      <h1>Hello, {name}</h1>
+      <input type="text" placeholder="name" value={name} onchange={(e) => setName(e.target.value)} />
+      <h2>The count is : {count}</h2>
+      <button onclick={() => setCount(count + 1)}>+</button>
+      <button onclick={() => setCount(count - 1)}>-</button>
       <p>
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Alias vero in neque adipisci quam laudantium iste, suscipit harum veritatis aspernatur odio reprehenderit, facilis vel ad voluptate
-        recusandae, doloremque repudiandae libero.
+        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ipsa harum perferendis veniam ut accusantium iusto deleniti nemo! Nisi quisquam natus itaque similique, adipisci voluptatum atque ex
+        deleniti harum quibusdam inventore!
       </p>
     </div>
   );
@@ -60,6 +64,7 @@ const render = (reactElementOrStringOrNumber, container) => {
 };
 
 const rerender = () => {
+  stateCursor = 0;
   document.getElementById("app").firstChild.remove();
   render(<App />, document.getElementById("app"));
 };

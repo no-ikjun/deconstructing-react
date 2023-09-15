@@ -148,33 +148,45 @@ var React = {
     return element;
   }
 };
-var useState = function useState(initialValue) {
-  console.log("initialValue", initialValue);
-  var state = initialValue;
+var states = [];
+var stateCursor = 0;
+var useState = function useState(initialState) {
+  var FROZENCURSOR = stateCursor;
+  states[FROZENCURSOR] = states[FROZENCURSOR] || initialState;
   var setState = function setState(newState) {
-    console.log("newState", newState);
-    state = newState;
+    states[FROZENCURSOR] = newState;
     rerender();
   };
-  return [function () {
-    return state;
-  }, setState];
+  stateCursor++;
+  return [states[FROZENCURSOR], setState];
 };
 var App = function App() {
   var _useState = useState("ikjun"),
     _useState2 = _slicedToArray(_useState, 2),
     name = _useState2[0],
     setName = _useState2[1];
+  var _useState3 = useState(0),
+    _useState4 = _slicedToArray(_useState3, 2),
+    count = _useState4[0],
+    setCount = _useState4[1];
   return React.createElement("div", {
     className: "good"
-  }, React.createElement("h1", null, "hello, ", "".concat(name())), React.createElement("input", {
+  }, React.createElement("h1", null, "Hello, ", name), React.createElement("input", {
     type: "text",
     placeholder: "name",
-    value: name(),
+    value: name,
     onchange: function onchange(e) {
       return setName(e.target.value);
     }
-  }), React.createElement("p", null, "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Alias vero in neque adipisci quam laudantium iste, suscipit harum veritatis aspernatur odio reprehenderit, facilis vel ad voluptate recusandae, doloremque repudiandae libero."));
+  }), React.createElement("h2", null, "The count is : ", count), React.createElement("button", {
+    onclick: function onclick() {
+      return setCount(count + 1);
+    }
+  }, "+"), React.createElement("button", {
+    onclick: function onclick() {
+      return setCount(count - 1);
+    }
+  }, "-"), React.createElement("p", null, "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ipsa harum perferendis veniam ut accusantium iusto deleniti nemo! Nisi quisquam natus itaque similique, adipisci voluptatum atque ex deleniti harum quibusdam inventore!"));
 };
 var render = function render(reactElementOrStringOrNumber, container) {
   if (["string", "number"].includes(_typeof(reactElementOrStringOrNumber))) {
@@ -197,6 +209,7 @@ var render = function render(reactElementOrStringOrNumber, container) {
   container.appendChild(actualDomElement);
 };
 var rerender = function rerender() {
+  stateCursor = 0;
   document.getElementById("app").firstChild.remove();
   render(React.createElement(App, null), document.getElementById("app"));
 };
