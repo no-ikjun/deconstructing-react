@@ -13,15 +13,34 @@ const React = {
     return element;
   },
 };
-const App = () => (
-  <div className="good">
-    <h1>hello</h1>
-    <p>
-      Lorem ipsum dolor sit amet consectetur, adipisicing elit. Alias vero in neque adipisci quam laudantium iste, suscipit harum veritatis aspernatur odio reprehenderit, facilis vel ad voluptate
-      recusandae, doloremque repudiandae libero.
-    </p>
-  </div>
-);
+
+const useState = (initialValue) => {
+  console.log("initialValue", initialValue);
+  let state = initialValue;
+  let setState = (newState) => {
+    console.log("newState", newState);
+    state = newState;
+    rerender();
+  };
+  return [
+    () => state, // 함수를 반환하여 state 값을 얻음
+    setState,
+  ];
+};
+
+const App = () => {
+  const [name, setName] = useState("ikjun");
+  return (
+    <div className="good">
+      <h1>hello, {`${name()}`}</h1>
+      <input type="text" placeholder="name" value={name()} onchange={(e) => setName(e.target.value)} />
+      <p>
+        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Alias vero in neque adipisci quam laudantium iste, suscipit harum veritatis aspernatur odio reprehenderit, facilis vel ad voluptate
+        recusandae, doloremque repudiandae libero.
+      </p>
+    </div>
+  );
+};
 
 const render = (reactElementOrStringOrNumber, container) => {
   if (["string", "number"].includes(typeof reactElementOrStringOrNumber)) {
@@ -38,6 +57,11 @@ const render = (reactElementOrStringOrNumber, container) => {
     reactElementOrStringOrNumber.props.children.forEach((child) => render(child, actualDomElement));
   }
   container.appendChild(actualDomElement);
+};
+
+const rerender = () => {
+  document.getElementById("app").firstChild.remove();
+  render(<App />, document.getElementById("app"));
 };
 
 render(<App />, document.getElementById("app"));

@@ -119,6 +119,12 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   return newRequire;
 })({"index.tsx":[function(require,module,exports) {
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var React = {
   createElement: function createElement(tag, props) {
     if (typeof tag === "function") {
@@ -142,10 +148,33 @@ var React = {
     return element;
   }
 };
+var useState = function useState(initialValue) {
+  console.log("initialValue", initialValue);
+  var state = initialValue;
+  var setState = function setState(newState) {
+    console.log("newState", newState);
+    state = newState;
+    rerender();
+  };
+  return [function () {
+    return state;
+  }, setState];
+};
 var App = function App() {
+  var _useState = useState("ikjun"),
+    _useState2 = _slicedToArray(_useState, 2),
+    name = _useState2[0],
+    setName = _useState2[1];
   return React.createElement("div", {
     className: "good"
-  }, React.createElement("h1", null, "hello"), React.createElement("p", null, "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Alias vero in neque adipisci quam laudantium iste, suscipit harum veritatis aspernatur odio reprehenderit, facilis vel ad voluptate recusandae, doloremque repudiandae libero."));
+  }, React.createElement("h1", null, "hello, ", "".concat(name())), React.createElement("input", {
+    type: "text",
+    placeholder: "name",
+    value: name(),
+    onchange: function onchange(e) {
+      return setName(e.target.value);
+    }
+  }), React.createElement("p", null, "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Alias vero in neque adipisci quam laudantium iste, suscipit harum veritatis aspernatur odio reprehenderit, facilis vel ad voluptate recusandae, doloremque repudiandae libero."));
 };
 var render = function render(reactElementOrStringOrNumber, container) {
   if (["string", "number"].includes(_typeof(reactElementOrStringOrNumber))) {
@@ -166,6 +195,10 @@ var render = function render(reactElementOrStringOrNumber, container) {
     });
   }
   container.appendChild(actualDomElement);
+};
+var rerender = function rerender() {
+  document.getElementById("app").firstChild.remove();
+  render(React.createElement(App, null), document.getElementById("app"));
 };
 render(React.createElement(App, null), document.getElementById("app"));
 },{}],"../../../../../../opt/homebrew/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
