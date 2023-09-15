@@ -118,10 +118,56 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 
   return newRequire;
 })({"index.tsx":[function(require,module,exports) {
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 var React = {
-  createElement: function createElement() {}
+  createElement: function createElement(tag, props) {
+    if (typeof tag === "function") {
+      try {
+        return tag(props);
+      } catch (error) {
+        console.error(error);
+        return null;
+      }
+    }
+    for (var _len = arguments.length, children = new Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+      children[_key - 2] = arguments[_key];
+    }
+    var element = {
+      tag: tag,
+      props: Object.assign(Object.assign({}, props), {
+        children: children
+      })
+    };
+    console.log(element);
+    return element;
+  }
 };
-var a = React.createElement("div", null, "hello");
+var App = function App() {
+  return React.createElement("div", {
+    className: "good"
+  }, React.createElement("h1", null, "hello"), React.createElement("p", null, "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Alias vero in neque adipisci quam laudantium iste, suscipit harum veritatis aspernatur odio reprehenderit, facilis vel ad voluptate recusandae, doloremque repudiandae libero."));
+};
+var render = function render(reactElementOrStringOrNumber, container) {
+  if (["string", "number"].includes(_typeof(reactElementOrStringOrNumber))) {
+    container.appendChild(document.createTextNode(String(reactElementOrStringOrNumber)));
+    return;
+  }
+  var actualDomElement = document.createElement(reactElementOrStringOrNumber.tag);
+  if (reactElementOrStringOrNumber.props) {
+    Object.keys(reactElementOrStringOrNumber.props).filter(function (key) {
+      return key !== "children";
+    }).forEach(function (key) {
+      return actualDomElement[key] = reactElementOrStringOrNumber.props[key];
+    });
+  }
+  if (reactElementOrStringOrNumber.props.children) {
+    reactElementOrStringOrNumber.props.children.forEach(function (child) {
+      return render(child, actualDomElement);
+    });
+  }
+  container.appendChild(actualDomElement);
+};
+render(React.createElement(App, null), document.getElementById("app"));
 },{}],"../../../../../../opt/homebrew/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -147,7 +193,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55040" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55513" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
