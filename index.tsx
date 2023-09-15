@@ -1,4 +1,10 @@
 const React = {
-  createElement: () => {},
+  createElement: (...args) => {
+    console.log(args);
+  },
 };
-const a = <div>hello</div>;
+const a = (
+  <div className="good" id="nice">
+    hello
+  </div>
+);
